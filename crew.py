@@ -200,5 +200,16 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
     return pm_streak_corp.kickoff()
 
 if __name__ == "__main__":
-    # Test directive
-    print(execute_company_mission("We need to increase conversion rate for users on the 'Learn' vertical."))
+    # Test directive with the real PM Streak GA4 Property ID
+    ga4_id = "529697573"
+    directive = "Analyze why user conversion for the 'Pro' upgrade is lower in the 'Learn' vertical compared to the 'Dashboard' and propose a data-driven UX improvement."
+    
+    print(f"\n🚀 STARTING ENTERPRISE MISSION: {directive}")
+    print(f"📊 TARGETING GA4 PROPERTY: {ga4_id}")
+    
+    report = execute_company_mission(directive, ga4_id)
+    
+    print("\n\n========================================")
+    print("FINAL STRATEGIC DELIVERABLE:")
+    print("========================================")
+    print(report)
