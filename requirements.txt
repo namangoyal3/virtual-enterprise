@@ -1,0 +1,9 @@
+crewai==0.11.2
+langchain_groq==1.1.2
+langchain_community==0.4.1
+google-analytics-data==0.21.0
+fastapi==0.135.3
+uvicorn==0.44.0
+duckduckgo-search==8.1.1
+pydantic==2.12.5
+python-dotenv==1.2.2

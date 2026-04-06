@@ -1,0 +1,80 @@
+Collecting crewai
+  Using cached crewai-0.11.2-py3-none-any.whl.metadata (12 kB)
+Collecting langchain-anthropic
+  Using cached langchain_anthropic-1.4.0-py3-none-any.whl.metadata (3.2 kB)
+Collecting instructor<0.6.0,>=0.5.2 (from crewai)
+  Using cached instructor-0.5.2-py3-none-any.whl.metadata (10 kB)
+Collecting langchain<0.2.0,>=0.1.0 (from crewai)
+  Using cached langchain-0.1.20-py3-none-any.whl.metadata (13 kB)
+Collecting langchain-openai<0.0.6,>=0.0.5 (from crewai)
+  Using cached langchain_openai-0.0.5-py3-none-any.whl.metadata (2.5 kB)
+Collecting openai<2.0.0,>=1.7.1 (from crewai)
+  Using cached openai-1.109.1-py3-none-any.whl.metadata (29 kB)
+Collecting opentelemetry-api<2.0.0,>=1.22.0 (from crewai)
+  Using cached opentelemetry_api-1.40.0-py3-none-any.whl.metadata (1.5 kB)
+Collecting opentelemetry-exporter-otlp-proto-http<2.0.0,>=1.22.0 (from crewai)
+  Using cached opentelemetry_exporter_otlp_proto_http-1.40.0-py3-none-any.whl.metadata (2.5 kB)
+Collecting opentelemetry-sdk<2.0.0,>=1.22.0 (from crewai)
+  Using cached opentelemetry_sdk-1.40.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting pydantic<3.0.0,>=2.4.2 (from crewai)
+  Using cached pydantic-2.12.5-py3-none-any.whl.metadata (90 kB)
+Collecting regex<2024.0.0,>=2023.12.25 (from crewai)
+  Using cached regex-2023.12.25.tar.gz (394 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting aiohttp<4.0.0,>=3.9.1 (from instructor<0.6.0,>=0.5.2->crewai)
+  Using cached aiohttp-3.13.5-cp314-cp314-macosx_11_0_arm64.whl.metadata (8.1 kB)
+Collecting docstring-parser<0.16,>=0.15 (from instructor<0.6.0,>=0.5.2->crewai)
+  Using cached docstring_parser-0.15-py3-none-any.whl.metadata (2.4 kB)
+Collecting rich<14.0.0,>=13.7.0 (from instructor<0.6.0,>=0.5.2->crewai)
+  Using cached rich-13.9.4-py3-none-any.whl.metadata (18 kB)
+Collecting tenacity<9.0.0,>=8.2.3 (from instructor<0.6.0,>=0.5.2->crewai)
+  Using cached tenacity-8.5.0-py3-none-any.whl.metadata (1.2 kB)
+Collecting typer<0.10.0,>=0.9.0 (from instructor<0.6.0,>=0.5.2->crewai)
+  Using cached typer-0.9.4-py3-none-any.whl.metadata (14 kB)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached aiohappyeyeballs-2.6.1-py3-none-any.whl.metadata (5.9 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting attrs>=17.3.0 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached frozenlist-1.8.0-cp314-cp314-macosx_11_0_arm64.whl.metadata (20 kB)
+Collecting multidict<7.0,>=4.5 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached multidict-6.7.1-cp314-cp314-macosx_11_0_arm64.whl.metadata (5.3 kB)
+Collecting propcache>=0.2.0 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached propcache-0.4.1-cp314-cp314-macosx_11_0_arm64.whl.metadata (13 kB)
+Collecting yarl<2.0,>=1.17.0 (from aiohttp<4.0.0,>=3.9.1->instructor<0.6.0,>=0.5.2->crewai)
+  Using cached yarl-1.23.0-cp314-cp314-macosx_11_0_arm64.whl.metadata (79 kB)
+Collecting PyYAML>=5.3 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached pyyaml-6.0.3-cp314-cp314-macosx_11_0_arm64.whl.metadata (2.4 kB)
+Collecting SQLAlchemy<3,>=1.4 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached sqlalchemy-2.0.49-cp314-cp314-macosx_11_0_arm64.whl.metadata (9.5 kB)
+Collecting dataclasses-json<0.7,>=0.5.7 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached dataclasses_json-0.6.7-py3-none-any.whl.metadata (25 kB)
+Collecting langchain-community<0.1,>=0.0.38 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached langchain_community-0.0.38-py3-none-any.whl.metadata (8.7 kB)
+Collecting langchain-core<0.2.0,>=0.1.52 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached langchain_core-0.1.53-py3-none-any.whl.metadata (5.9 kB)
+Collecting langchain-text-splitters<0.1,>=0.0.1 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached langchain_text_splitters-0.0.2-py3-none-any.whl.metadata (2.2 kB)
+Collecting langsmith<0.2.0,>=0.1.17 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached langsmith-0.1.147-py3-none-any.whl.metadata (14 kB)
+Collecting numpy<2,>=1 (from langchain<0.2.0,>=0.1.0->crewai)
+  Using cached numpy-1.26.4.tar.gz (15.8 MB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'canceled'
+
+[notice] A new release of pip is available: 26.0 -> 26.0.1
+[notice] To update, run: pip install --upgrade pip
+ERROR: Operation cancelled by user
