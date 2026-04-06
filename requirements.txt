@@ -1,5 +1,4 @@
-crewai[tools]==1.13.0
-langchain-groq>=0.3.0
+crewai[tools,litellm]==1.13.0
 google-analytics-data>=0.21.0
 fastapi>=0.115.0
 uvicorn>=0.34.0
