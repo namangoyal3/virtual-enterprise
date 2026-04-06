@@ -68,7 +68,6 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
             temperature=0.3,
             api_key=openrouter_key,
             max_tokens=1024,
-            num_retries=5,
         )
     else:
         llm = LLM(
@@ -76,7 +75,6 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
             temperature=0.3,
             api_key=os.getenv("GROQ_API_KEY"),
             max_tokens=1024,
-            num_retries=15,
         )
 
     ga4_tool = make_ga4_tool()
