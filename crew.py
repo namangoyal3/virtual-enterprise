@@ -58,17 +58,18 @@ def make_ga4_tool():
 def execute_company_mission(directive: str, ga4_property_id: Optional[str] = None):
     from crewai import Agent, Task, Crew, Process, LLM
 
-    # CEO gets the 70B brain for strategy; workers use 8B for speed + rate limit headroom
-    # Aggressive retry: Groq free tier = 12K TPM for 70B. 
-    # Each agent call ~2K tokens, so we need delays between calls.
-    os.environ["LITELLM_NUM_RETRIES"] = "10"
-    os.environ["LITELLM_RETRY_DELAY"] = "15"
+    # Groq free tier: 12K TPM for llama-3.3-70b. Cap each response to 1024 tokens
+    # and retry aggressively with 30s gaps so the bucket refills.
+    import time
+    os.environ["LITELLM_NUM_RETRIES"] = "15"
+    os.environ["LITELLM_RETRY_DELAY"] = "30"
 
     llm = LLM(
         model="groq/llama-3.3-70b-versatile",
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY"),
-        num_retries=10,
+        num_retries=15,
+        max_tokens=1024,
     )
 
     ga4_tool = make_ga4_tool()
