@@ -58,8 +58,17 @@ def make_ga4_tool():
 def execute_company_mission(directive: str, ga4_property_id: Optional[str] = None):
     from crewai import Agent, Task, Crew, Process, LLM
 
-    llm = LLM(
+    # CEO gets the 70B brain for strategy; workers use 8B for speed + rate limit headroom
+    os.environ["LITELLM_NUM_RETRIES"] = "5"
+    os.environ["LITELLM_RETRY_DELAY"] = "10"
+
+    ceo_llm = LLM(
         model="groq/llama-3.3-70b-versatile",
+        temperature=0.3,
+        api_key=os.getenv("GROQ_API_KEY"),
+    )
+    worker_llm = LLM(
+        model="groq/llama-3.1-8b-instant",
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY"),
     )
@@ -70,43 +79,43 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
         role="Chief Executive Officer",
         goal="Orchestrate departments to solve high-level business directives using data-driven strategy.",
         backstory="You are a data-driven CEO who coordinates analysts, PMs, and engineers before making decisions.",
-        allow_delegation=True, llm=llm, verbose=True,
+        allow_delegation=True, llm=ceo_llm, verbose=True,
     )
     analyst = Agent(
         role="Senior Data Analyst",
         goal="Identify traffic drop-offs, low-converting pages, and user behavior using GA4.",
         backstory="You are obsessed with metrics. When traffic dips, you sound the alarm.",
-        tools=[ga4_tool], llm=llm, verbose=True,
+        tools=[ga4_tool], llm=worker_llm, verbose=True,
     )
     pm = Agent(
         role="Lead Product Manager",
         goal="Convert analytical insights into technical PRDs with clear specs.",
         backstory="You take raw data from the Analyst and write specs the Engineer can execute.",
-        llm=llm, verbose=True,
+        llm=worker_llm, verbose=True,
     )
     engineer = Agent(
         role="Lead Software Engineer",
         goal="Build production-ready features using Next.js and Python based on the PRD.",
         backstory="You implement what is in the PRD with clean, tested, deployable code.",
-        llm=llm, verbose=True,
+        llm=worker_llm, verbose=True,
     )
     marketing = Agent(
         role="Head of Growth and SEO",
         goal="Maximize search presence and brand visibility for new features.",
         backstory="You bridge technical SEO and viral social marketing to launch features.",
-        llm=llm, verbose=True,
+        llm=worker_llm, verbose=True,
     )
     sales = Agent(
         role="Direct Sales Lead",
         goal="Identify high-value leads and close potential enterprise or pro users.",
         backstory="You monitor the web for PM-interview pain and offer solutions.",
-        llm=llm, verbose=True,
+        llm=worker_llm, verbose=True,
     )
     cs = Agent(
         role="Head of Customer Success",
         goal="Maintain high user retention and advocate for UI improvements.",
         backstory="You represent the voice of the user. If users are confused, you advocate for change.",
-        llm=llm, verbose=True,
+        llm=worker_llm, verbose=True,
     )
 
     task_strategy = Task(
