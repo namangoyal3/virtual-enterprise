@@ -58,10 +58,9 @@ def make_ga4_tool():
 def execute_company_mission(directive: str, ga4_property_id: Optional[str] = None):
     from crewai import Agent, Task, Crew, Process, LLM
 
-    # Groq free tier limits: gemma2-9b-it has 15K TPM (highest).
-    # Cap output to 512 tokens per agent call to fit 5 agents within budget.
+    # Using Llama 4 Scout (newer model, likely higher rate limits on Groq free tier)
     llm = LLM(
-        model="groq/gemma2-9b-it",
+        model="groq/meta-llama/llama-4-scout-17b-16e-instruct",
         temperature=0.3,
         api_key=os.getenv("GROQ_API_KEY"),
         max_tokens=512,
