@@ -52,6 +52,55 @@ def make_ga4_tool():
 
     return GoogleAnalytics4Tool()
 
+def make_github_pr_tool():
+    from crewai.tools import BaseTool
+    from pydantic import BaseModel, Field
+    from typing import Type
+    
+    class GitHubPRSchema(BaseModel):
+        repo_name: str = Field(..., description="Repository name, e.g. 'namangoyal3/pm-streak'")
+        file_path: str = Field(..., description="Path to the file to update, e.g. 'src/app/page.tsx'")
+        new_content: str = Field(..., description="Complete newly updated code for the file")
+        commit_message: str = Field(..., description="Commit message describing the change")
+        pr_title: str = Field(..., description="Title for the Pull Request")
+        pr_body: str = Field(..., description="Description/PR body explaining the feature")
+
+    class GitHubPRTool(BaseTool):
+        name: str = "github_pr_creator"
+        description: str = (
+            "Creates a new branch, commits updated code to a file, and opens a Pull Request on GitHub. "
+            "Use this tool when you want to deploy a feature live or push an A/B test."
+        )
+        args_schema: Type[BaseModel] = GitHubPRSchema
+
+        def _run(self, repo_name: str, file_path: str, new_content: str, commit_message: str, pr_title: str, pr_body: str) -> str:
+            import os
+            token = os.getenv("GITHUB_TOKEN")
+            if not token:
+                return "ERROR: GITHUB_TOKEN not found in environment."
+            
+            try:
+                from github import Github
+                import time
+                g = Github(token)
+                repo = g.get_repo(repo_name)
+                
+                main_ref = repo.get_git_ref("heads/main")
+                branch_name = f"ai-feature-{int(time.time())}"
+                repo.create_git_ref(ref=f"refs/heads/{branch_name}", sha=main_ref.object.sha)
+                
+                try:
+                    contents = repo.get_contents(file_path, ref="main")
+                    repo.update_file(contents.path, commit_message, new_content, contents.sha, branch=branch_name)
+                except Exception:
+                    repo.create_file(file_path, commit_message, new_content, branch=branch_name)
+                    
+                pr = repo.create_pull(title=pr_title, body=pr_body, head=branch_name, base="main")
+                return f"SUCCESS: Pull request created! URL: {pr.html_url}"
+            except Exception as e:
+                return f"GitHub API Error: {e}"
+
+    return GitHubPRTool()
 
 # ── Mission Execution (lazy init) ──────────────────────────────
 
@@ -67,6 +116,7 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
     )
 
     ga4_tool = make_ga4_tool()
+    github_tool = make_github_pr_tool()
 
     ceo = Agent(
         role="CEO (Chief Executive Officer)",
@@ -88,8 +138,14 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
     )
     cto = Agent(
         role="CTO (Chief Technology Officer)",
-        goal="Architect and ship production-ready code using Next.js and Python. Own technical quality and system reliability.",
-        backstory="You are a CTO who has built systems handling 1M+ requests per second. You write clean, tested, deployable code and refuse to ship anything without proper error handling.",
+        goal="Architect and ship production-ready code using Next.js and Python. Deploy code using GitHub Pull Requests.",
+        backstory="You are a CTO who has built systems handling 1M+ requests per second. You use the github_pr_creator tool to deploy features automatically to 'namangoyal3/pm-streak'.",
+        tools=[github_tool], llm=llm, verbose=True,
+    )
+    cqo = Agent(
+        role="CQO (Chief Quality & Testing Officer)",
+        goal="Design rigorous A/B tests for all new features and QA the CTO's implementations.",
+        backstory="You are obsessed with continuous testing and statistical significance. You evaluate PRs and dictate which successful features should be kept and optimized.",
         llm=llm, verbose=True,
     )
     cmo = Agent(
@@ -132,9 +188,14 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
         agent=cpo, context=[task_analysis],
     )
     task_coding = Task(
-        description="CTO: Implement production-ready code for the feature in the CPO's PRD.",
-        expected_output="Functional code blocks ready for deployment.",
+        description="CTO: Implement production-ready code for the CPO's PRD. You MUST open a Pull Request using the github_pr_creator tool to deploy this feature to 'namangoyal3/pm-streak'. Provide the PR URL when done.",
+        expected_output="A successful PR URL with the implemented features.",
         agent=cto, context=[task_prd],
+    )
+    task_qa = Task(
+        description="CQO: Review the CTO's implementation/PR. Design a rigorous A/B testing plan. Define success criteria to ensure that only successful features are kept.",
+        expected_output="QA validation report and A/B test launch plan.",
+        agent=cqo, context=[task_coding],
     )
     task_marketing = Task(
         description="CMO: Write a multi-channel launch plan and SEO keyword targets for the new feature.",
@@ -143,8 +204,8 @@ def execute_company_mission(directive: str, ga4_property_id: Optional[str] = Non
     )
 
     corp = Crew(
-        agents=[ceo, cdo, cpo, cto, cmo, cro, cco],
-        tasks=[task_strategy, task_analysis, task_prd, task_coding, task_marketing],
+        agents=[ceo, cdo, cpo, cto, cqo, cmo, cro, cco],
+        tasks=[task_strategy, task_analysis, task_prd, task_coding, task_qa, task_marketing],
         process=Process.sequential, verbose=True,
     )
     result = corp.kickoff()

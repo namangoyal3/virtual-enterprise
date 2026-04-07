@@ -18,7 +18,7 @@ mission_counter = 0
 async def health_check():
     return {
         "status": "online",
-        "departments": ["CEO", "CDO (Data)", "CPO (Product)", "CTO (Tech)", "CMO (Marketing)", "CRO (Revenue)", "CCO (Customer)"],
+        "departments": ["CEO", "CDO (Data)", "CPO (Product)", "CTO (Tech)", "CQO (Quality)", "CMO (Marketing)", "CRO (Revenue)", "CCO (Customer)"],
         "missions_completed": len(mission_results),
     }
 
