@@ -58,24 +58,14 @@ def make_ga4_tool():
 def execute_company_mission(directive: str, ga4_property_id: Optional[str] = None):
     from crewai import Agent, Task, Crew, Process, LLM
 
-    # OpenRouter has much higher rate limits than Groq free tier (12K TPM).
-    # Use OpenRouter as the provider, Groq as fallback.
-    openrouter_key = os.getenv("OPENROUTER_API_KEY")
-    
-    if openrouter_key:
-        llm = LLM(
-            model="openrouter/meta-llama/llama-3.3-70b-instruct",
-            temperature=0.3,
-            api_key=openrouter_key,
-            max_tokens=1024,
-        )
-    else:
-        llm = LLM(
-            model="groq/llama-3.3-70b-versatile",
-            temperature=0.3,
-            api_key=os.getenv("GROQ_API_KEY"),
-            max_tokens=1024,
-        )
+    # Groq free tier limits: gemma2-9b-it has 15K TPM (highest).
+    # Cap output to 512 tokens per agent call to fit 5 agents within budget.
+    llm = LLM(
+        model="groq/gemma2-9b-it",
+        temperature=0.3,
+        api_key=os.getenv("GROQ_API_KEY"),
+        max_tokens=512,
+    )
 
     ga4_tool = make_ga4_tool()
 
